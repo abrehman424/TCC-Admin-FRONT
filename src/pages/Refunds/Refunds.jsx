@@ -400,21 +400,12 @@ const Refunds = () => {
             <div
               key={r.id}
               className="bg-white rounded-lg border-color p-4 flex flex-col gap-2 cursor-pointer"
-              
+               onClick={() => navigate(`/refund/refundsdetail/${r.id}`)}
             >
               <div className="flex  items-center justify-between">
                 <div className="flex gap-3">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 rounded border-[1.5px] border-gray-400"
-                    checked={selected.includes(r.id)}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      handleSelectOne(r.id);
-                    }}
-                  />
-                  <div className="flex gap-2" onClick={() => navigate(`/refund/refundsdetail/${r.id}`)}>
-                    <p className="fw5"> ID:</p> {r.refund_id}
+                  <div className="flex gap-2">
+                    <p className="fw5 text-base">Refund ID:</p> {r.refund_id}
                     </div>
                 </div>
                     <div >
@@ -427,22 +418,22 @@ const Refunds = () => {
                       </span>
                 </div>
               </div>
-              <div className="flex gap-2 text-sm" onClick={() => navigate(`/refund/refundsdetail/${r.id}`)}>
+              <div className="flex gap-3 text-sm">
                  <p className="fw5">Traveler: </p> {r.order?.traveler_name}
                  </div>
-                 <div className="flex gap-2 text-sm">
+                 <div className="flex gap-3 text-sm">
               <p className="fw5">Partner: </p> {r.order?.partner_name}
                  </div>
               
-              <div className="grid grid-cols-2 " onClick={() => navigate(`/refund/refundsdetail/${r.id}`)}>
-                <div className="flex gap-2 text-sm">
+              <div className="grid grid-cols-2 ">
+                <div className="flex gap-3 text-sm">
                 <p className="fw5">Order: </p> #{r.id}
                 </div>
-                <div className="flex gap-2 text-sm">
+                <div className="flex gap-3 text-sm">
               <p className="fw5">Total: </p> ${r.amount}
               </div>
               </div>
-              <div className="flex gap-2 text-sm" onClick={() => navigate(`/refund/refundsdetail/${r.id}`)}>
+              <div className="flex gap-3 text-sm">
                 <p className="fw5">Date:</p> {r.requested_at}
               </div>
             </div>
