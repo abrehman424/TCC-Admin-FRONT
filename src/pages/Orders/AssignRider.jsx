@@ -31,7 +31,6 @@ const AssignRider = () => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(5);
 
-
   const statusColors = {
     Online: "bg-[#E7F7ED] text-[#088B3A]",
     Offline: "bg-[#FCECD6] text-[#CA4E2E]",
@@ -78,15 +77,11 @@ const AssignRider = () => {
     setSelected(selected === id ? null : id);
   };
 
-
   useEffect(() => {
     const handleClickOutside = (event) => {
-
-
       if (statusRef.current && !statusRef.current.contains(event.target)) {
         setStatusOpen(false);
       }
-
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -124,14 +119,14 @@ const AssignRider = () => {
           <span className="mx-2 text-[#9A9A9A]">/</span>
           <p className="text-[#F77F00]"> Assign Order</p>
         </div> */}
-         <Breadcrumb
-            items={[
-              { label: "Dashboard", path: "/" },
-              { label: "Orders", path: "/orders" },
+        <Breadcrumb
+          items={[
+            { label: "Dashboard", path: "/" },
+            { label: "Orders", path: "/orders" },
 
-              { label: "Assign Rider" },
-            ]}
-          />
+            { label: "Assign Rider" },
+          ]}
+        />
         <div className="flex gap-3 items-center">
           <Link to="/orders" className="group">
             <img
@@ -146,21 +141,21 @@ const AssignRider = () => {
         </div>
       </div>
 
-      <div className="bg-[#FFFFFF] rounded-lg border-color p-6 gap-6 md:mt-4">
-        <div className="flex flex-col md:flex-row items-center justify-between  gap-4">
-          <div className="relative text-[#9A9A9A] px-4 py-2 gap-3 text-xs leading-[150%] tracking-[-3%]">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-6">
+      <div className="bg-[#FFFFFF] rounded-lg border-color p-6 gap-6 ">
+        <div className="flex  md:flex-row md:items-center items-center justify-between  gap-4">
+          <div className="relative text-[#9A9A9A] w-full md:w-[320px] px-4 py-2 gap-3 text-xs leading-[150%] tracking-[-3%]">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-6 md:pl-6">
               <Search size={16} />
             </span>
             <input
               type="text"
               placeholder="Search riders..."
-              className="pl-8 pr-2 px-4 py-2 gap-2 border border-[#D9D9D9] rounded-xl text-base w-[320px] leading-[150%] focus:outline-none focus:border-[#D9D9D9]"
+              className="pl-8 md:pl-8 pr-2 px-4 py-2 border border-[#D9D9D9] rounded-xl text-base w-full md:w-[320px] focus:outline-none focus:border-[#D9D9D9]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="relative" ref={statusRef}>
+          <div className="relative mt-2 md:mt-0" ref={statusRef}>
             <button
               onClick={() => setStatusOpen(!statusOpen)}
               className="flex items-center justify-between border border-[#23232333] rounded-md px-3 py-0.5 text-xs text-[#9A9A9A] min-w-[79px] h-[36px]"
@@ -187,7 +182,7 @@ const AssignRider = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto hidden">
           <table className="w-full  rounded-t-lg ">
             <thead className="">
               <tr className="bg-[#F9F9F9] text-sm uppercase text-[#6C6C6C]">
@@ -250,8 +245,9 @@ const AssignRider = () => {
                     <td className="px-4 py-3 text-[#232323] ">{r.eta}</td>
                     <td className="px-4 py-3 text-[#232323]">
                       <span
-                        className={`px-3 py-1 rounded-md text-xs fw5 ${statusColors[r.availability_status] || ""
-                          }`}
+                        className={`px-3 py-1 rounded-md text-xs fw5 ${
+                          statusColors[r.availability_status] || ""
+                        }`}
                       >
                         {r.availability_status}
                       </span>
@@ -262,6 +258,72 @@ const AssignRider = () => {
             </tbody>
           </table>
         </div>
+
+        {/* MOBILE CARDS */}
+        <div className="block md:hidden py-3 space-y-4">
+          {paginatedRiders.map((r) => (
+            <div
+              key={r.id}
+              className="bg-white rounded-lg border-color p-4 cursor-pointer flex flex-col gap-2"
+              onClick={() => handleSelectOne(r.id)}
+            >
+              <div className="flex justify-between  ">
+                <div className="flex  gap-3 items-center text-sm">
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 rounded border-[1.5px] border-[#9A9A9A]"
+                    checked={selected === r.id}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      handleSelectOne(r.id);
+                    }}
+                  />
+                  <div className="flex gap-2 fw4">
+                    <p className="fw5 text-orange text-sm">Rider ID:</p> {r.id}
+                  </div>
+                </div>
+                <div>
+                  <span
+                    className={`px-3 py-1 rounded-md text-xs fw5 ${
+                      statusColors[r.availability_status] || ""
+                    }`}
+                  >
+                    {r.availability_status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <img
+                  src={r.profile_photo || DefaultProfile}
+                  alt="Rider"
+                  className="w-10 h-10 rounded-xl object-cover"
+                />
+                <div className="flex flex-col">
+                  <p className="text-sm fw5">{r.name}</p>
+                  <p className="text-xs text-gray-500">{r.email}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 ">
+                <div className="flex gap-2 text-xs">
+                  <p className="text-sm flex items-center gap-1">
+                    Rating:
+                    <img src={Rating} alt="" /> {r.rating}
+                  </p>
+                </div>
+
+                <div className="flex gap-2 text-sm">
+                  <p>Current Order:</p>
+                  {r.current_assigned_orders}
+                </div>
+                <div className="flex gap-2 text-sm">
+                  <p>ETA: </p> {r.eta}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <Pagination
           page={page}
           setPage={setPage}
@@ -271,11 +333,18 @@ const AssignRider = () => {
           fullWidth={true}
         />
       </div>
-      <div className="relative bottom-0 left-0 right-0 bg-[#FFFFFF]  px-6 py-6 flex justify-end gap-3">
-        <button onClick={() => navigate('/orders')} className="px-4 py-3 text-sm border border-[#F77F00] bg-[#FEF2E6] text-[#F77F00]  rounded-lg hover:bg-[#F77F00] hover:text-[#FFFFFF]">
+
+      <div className="relative bottom-0 left-0 right-0 bg-[#FFFFFF] px-6 py-6 flex  md:flex-row gap-3 justify-end">
+        <button
+          onClick={() => navigate("/orders")}
+          className="px-4 py-3 text-sm border border-[#F77F00] bg-[#FEF2E6] text-[#F77F00] rounded-lg hover:bg-[#F77F00] hover:text-[#FFFFFF]"
+        >
           Cancel
         </button>
-        <button  onClick={handleAssign} className="px-4 py-3 text-sm border border-[#F77F00] bg-[#FEF2E6] text-[#F77F00]  rounded-lg hover:bg-[#F77F00] hover:text-[#FFFFFF]">
+        <button
+          onClick={handleAssign}
+          className="px-4 py-3 text-sm border border-[#F77F00] bg-[#FEF2E6] text-[#F77F00] rounded-lg hover:bg-[#F77F00] hover:text-[#FFFFFF]"
+        >
           Assign
         </button>
       </div>

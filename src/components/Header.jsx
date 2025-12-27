@@ -320,7 +320,7 @@ const Header = ({ toggleSidebar }) => {
           )}
         </div>
 
-        <div className="flex items-center gap-3 relative" ref={profileRef}>
+        <div className=" items-center gap-3 relative hidden md:block" ref={profileRef}>
           <button
             onClick={toggleDropdown}
             className="flex items-center gap-2 focus:outline-none hover:bg-gray-50 p-2 rounded-lg transition-colors"

@@ -189,7 +189,7 @@ const Products = () => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="pl-9 pr-2 px-4 py-2 border border-gray-300 rounded-xl text-base w-[320px] focus:outline-none"
+              className="pl-9 pr-2 px-4 py-2 border border-gray-300 rounded-xl text- sm:w-[260px]  md:w-[320px] focus:outline-none"
             />
           </div>
 

@@ -12,54 +12,102 @@ import Breadcrumb from "../../components/Breadcrumb";
 const GEOAPIFY_KEY = import.meta.env.VITE_APP_GEOAPIFY_KEY;
 
 
-const Dropdown = ({ label, options = [], multiple = false, value, onChange, triggerClass, dropdownClass, error }) => {
-    const [open, setOpen] = useState(false);
+const Dropdown = ({
+  label,
+  options = [],
+  multiple = false,
+  value = multiple ? [] : "",
+  onChange,
+  triggerClass,
+  dropdownClass,
+  error,
+}) => {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = React.useRef(null);
 
-    const handleSelect = (opt) => {
-        if (multiple) {
-            const newValue = value.includes(opt)
-                ? value.filter((v) => v !== opt)
-                : [...value, opt];
-            onChange(newValue);
-        } else {
-            onChange(opt);
-            setOpen(false);
-        }
+  const handleSelect = (opt) => {
+    if (multiple) {
+      const newValue = value.includes(opt)
+        ? value.filter((v) => v !== opt)
+        : [...value, opt];
+      onChange(newValue);
+    } else {
+      onChange(opt);
+      setOpen(false);
+    }
+  };
+
+  const displayValue = multiple
+    ? value.length > 0
+      ? value.join(", ")
+      : label
+    : value || label;
+
+  /* ✅ Close on outside click (mobile + desktop) */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
     };
 
-    const displayValue = multiple ? value.join(", ") || label : value || label;
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
 
-    return (
-        <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-            <div
-                className={`flex items-center border border-[#afaaaa89] rounded-lg px-4 py-4 cursor-pointer bg-white ${triggerClass}`}
-                onClick={() => setOpen((prev) => !prev)}
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={dropdownRef}
+      className="relative w-full"
+      onMouseEnter={() => window.innerWidth >= 768 && setOpen(true)}
+      onMouseLeave={() => window.innerWidth >= 768 && setOpen(false)}
+    >
+      {/* Trigger */}
+      <div
+        className={`flex items-center border border-[#afaaaa89] rounded-lg px-4 py-4 cursor-pointer bg-white ${triggerClass}`}
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <span className="text-[#121212] text-sm flex-1 truncate">
+          {displayValue}
+        </span>
+        <FiChevronDown
+          className={`transition-transform duration-300 w-5 h-5 ${
+            open ? "rotate-180" : "rotate-0"
+          }`}
+        />
+      </div>
+
+      {/* Dropdown */}
+      {open && (
+        <div
+          className={`absolute top-full left-0 mt-1 w-full bg-white border border-[#D9D9D9] rounded-lg shadow-md z-50 ${dropdownClass}`}
+        >
+          {options.map((opt, index) => (
+            <span
+              key={index}
+              onClick={() => handleSelect(opt)}
+              className={`block px-4 py-2 text-sm cursor-pointer rounded hover:bg-[#F77F00] hover:text-white ${
+                multiple && value.includes(opt)
+                  ? "bg-[#f6a34b] text-white mb-1"
+                  : ""
+              }`}
             >
-                <span className="text-[#121212] text-sm flex-1">{displayValue}</span>
-                <FiChevronDown
-                    className={`transform transition-transform duration-300 w-5 h-5 ${open ? "rotate-180" : "rotate-0"}`}
-                />
-            </div>
-            {open && (
-                <div
-                    className={`absolute top-full left-0 bg-[#FFFFFF] border border-[#D9D9D9] rounded-lg shadow-md z-10 ${dropdownClass}`}
-                >
-                    {options.map((opt, index) => (
-                        <span
-                            key={index}
-                            onClick={() => handleSelect(opt)}
-                            className={`block hover:bg-[#F77F00] hover:text-[#FFFFFF] p-1 rounded cursor-pointer text-[#121212] py-2 px-4 ${multiple && value.includes(opt) ? "bg-[#f6a34b] text-white mb-1" : ""
-                                }`}
-                        >
-                            {opt}
-                        </span>
-                    ))}
-                </div>
-            )}
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+              {opt}
+            </span>
+          ))}
         </div>
-    );
+      )}
+
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+    </div>
+  );
 };
+
 
 const UpdateRider = () => {
     const { id } = useParams();
@@ -224,9 +272,9 @@ const UpdateRider = () => {
 
 
     return (
-        <form
+         <form
             onSubmit={handleUpdate}
-            className="flex flex-col p-4 top-[120px] left-[281px] gap-6"
+            className="flex flex-col p-4 gap-6 md:p-6 lg:p-8 max-w-[1200px] mx-auto"
         >
 
 
@@ -246,7 +294,7 @@ const UpdateRider = () => {
               { label: "Update Rider" },
             ]}
           />
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
                     <div className="flex flex-col gap-2.5">
                         <div className="flex gap-3 items-center">
                             <Link to="/riders" className="group">
@@ -266,7 +314,7 @@ const UpdateRider = () => {
                         </p>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap md:flex-nowrap justify-end self-end">
                         <button
                             type="button"
                             onClick={() => navigate("/riders")}
@@ -300,7 +348,7 @@ const UpdateRider = () => {
                             className="w-18 h-18 rounded-[10px]"
                         />
 
-                        <div className="flex py-4 gap-2">
+                        <div className="flex flex-col sm:flex-row py-4 gap-2 sm:gap-2 w-full">
                             <input
                                 type="file"
                                 name="profileImage"
@@ -310,7 +358,7 @@ const UpdateRider = () => {
                             />
                             <label
                                 htmlFor="profileImage"
-                                className="border border-[#F77F00] bg-[#F77F00] rounded-lg p-3 text-xs text-[#FEF2E6] cursor-pointer hover:bg-orange hover:text-white"
+                                className="border border-[#F77F00] text-center bg-[#F77F00] rounded-lg p-3 text-xs text-[#FEF2E6] cursor-pointer hover:bg-orange hover:text-white"
                             >
                                 Upload new picture
                             </label>

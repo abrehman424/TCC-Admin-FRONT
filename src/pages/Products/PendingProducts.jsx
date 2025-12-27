@@ -21,7 +21,8 @@ const PendingProducts = ({ products = [], openActionId, setOpenActionId }) => {
   };
 
   return (
-    <table className="w-full text-left text-sm border-collapse leading-[150%] tracking-[-3%]">
+    <>
+    <table className="hidden lg:table w-full text-left text-sm border-collapse leading-[150%] tracking-[-3%]">
       <thead className="bg-[#F9F9F9] text-[#6C6C6C]">
         <tr>
           <th className="px-4 py-3">
@@ -156,6 +157,63 @@ const PendingProducts = ({ products = [], openActionId, setOpenActionId }) => {
         )}
       </tbody>
     </table>
+
+ {/* ================= MOBILE CARDS ================= */}
+      <div className="lg:hidden space-y-4">
+        {products.map((p) => (
+          <div
+            key={p.id}
+            className="border rounded-xl p-4 bg-white shadow-sm relative"
+            onClick={() => navigate(`/products/productsdetail`)}
+          >
+            <div className="flex justify-between">
+              <div className="flex gap-3">
+                <img src={p.image} className="w-12 h-12 rounded-lg" />
+                <div>
+                  <p className="font-medium">{p.productName}</p>
+                  <p className="text-xs text-gray-500">#{p.productId}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenActionId(openActionId === p.id ? null : p.id);
+                }}
+                className="p-2 bg-[#FEF2E6] rounded-lg"
+              >
+                <FiMoreHorizontal />
+              </button>
+            </div>
+
+            <div className="mt-3 text-sm space-y-1">
+              <p><strong>Partner:</strong> {p.partnerName}</p>
+              <p><strong>Category:</strong> {p.category}</p>
+              <p><strong>Stock:</strong> {p.stock}</p>
+              <p><strong>Price:</strong> ${p.price}</p>
+            </div>
+
+            <span className="inline-block mt-2 px-3 py-1 text-xs rounded-md bg-[#E1FDFD] text-[#3E77B0]">
+              {p.status}
+            </span>
+
+            {openActionId === p.id && (
+              <div
+                className="absolute right-4 top-14 w-40 bg-white shadow-lg rounded-md z-20"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ul>
+                  <li className="px-4 py-2 hover:bg-[#FEF2E6]">View Details</li>
+                  <li className="px-4 py-2 hover:bg-[#FEF2E6]">Approve</li>
+                  <li className="px-4 py-2 hover:bg-[#FEF2E6]">Reject</li>
+                  <li className="px-4 py-2 hover:bg-[#FEF2E6]">Request Info</li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

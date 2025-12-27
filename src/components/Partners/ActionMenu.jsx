@@ -137,7 +137,7 @@ const ActionMenu = ({
               item.onClick?.(partner);
               setOpenActionId(null);
             }}
-            className="flex w-full items-center px-4 py-2 text-[12px] text-[#4F4F4F] hover:bg-[#FEF2E6]"
+            className="flex w-full items-center px-3 py-2 text-[12px] text-[#4F4F4F] hover:bg-[#FEF2E6]"
           >
             {item.label}
           </button>

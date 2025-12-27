@@ -181,7 +181,7 @@ const RefundsDetail = () => {
                 <h2 className=" text-lg fw6 text-[#232323] ">
                   Order Information
                 </h2>
-                <div className="flex flex-cols-5 justify-between text-sm text-[#9A9A9A] fw5 gap-2 ">
+                <div className="grid grid-cols-2 md:grid-cols-5 justify-between text-sm text-[#9A9A9A] fw5 gap-2 ">
                   <div className="flex flex-col gap-2">
                     <p className="">Date</p>
                     <p className="text-[#232323]">{orderInfo?.created_at}</p>
@@ -252,7 +252,7 @@ const RefundsDetail = () => {
 
               <div className="flex flex-col bg-[#FFFFFF] p-6 rounded-2xl shadow-sm gap-6 ">
                 <h2 className="text-lg fw6 text-[#232323]">Transactions</h2>
-                <div className="flex  justify-between text-sm fw5">
+                <div className="flex justify-between text-sm fw5">
                   <div className="flex flex-cols-3 items-center justify-between gap-3">
                     <img src={Paypal} alt="" className="flex justify-center" />
 
