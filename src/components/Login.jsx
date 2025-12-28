@@ -20,7 +20,6 @@ const Login = () => {
   const [oauthLoading, setOauthLoading] = useState(null);
   const { login } = useAuth();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFieldErrors({});
@@ -35,24 +34,26 @@ const Login = () => {
 
   // OAuth handlers
   const handleGoogleLogin = () => {
-    setOauthLoading('google');
+    setOauthLoading("google");
     setError("");
-    
-    const API_URL = import.meta.env.VITE_API_URL || 'https://travelclothingclub-admin.online/api';
-    
+
+    const API_URL =
+      import.meta.env.VITE_API_URL ||
+      "https://travelclothingclub-admin.online/api";
+
     // Option 1: Direct redirect (current approach)
     window.location.href = `${API_URL}/social/google/redirect`;
-    
+
     // Option 2: Popup approach (uncomment if you prefer popup)
     // const popup = window.open(
     //   `${API_URL}/social/google/redirect`,
     //   'google-oauth',
     //   'width=500,height=600,scrollbars=yes,resizable=yes'
     // );
-    
+
     // const handleMessage = (event) => {
     //   if (event.origin !== new URL(API_URL).origin) return;
-    //   
+    //
     //   if (event.data.type === 'OAUTH_SUCCESS') {
     //     localStorage.setItem('auth_token', event.data.token);
     //     localStorage.setItem('auth_user', JSON.stringify(event.data.user));
@@ -61,55 +62,64 @@ const Login = () => {
     //   } else if (event.data.type === 'OAUTH_ERROR') {
     //     setError(event.data.error);
     //   }
-    //   
+    //
     //   setOauthLoading(null);
     //   window.removeEventListener('message', handleMessage);
     //   popup.close();
     // };
-    
+
     // window.addEventListener('message', handleMessage);
   };
 
   const handleAppleLogin = () => {
-    setOauthLoading('apple');
+    setOauthLoading("apple");
     setError("");
-    
+
     // Direct redirect to backend OAuth endpoint
-    const API_URL = import.meta.env.VITE_API_URL || 'https://travelclothingclub-admin.online/api';
+    const API_URL =
+      import.meta.env.VITE_API_URL ||
+      "https://travelclothingclub-admin.online/api";
     window.location.href = `${API_URL}/social/apple/redirect`;
   };
 
   const handleShopifyLogin = async () => {
     try {
-      setOauthLoading('shopify');
+      setOauthLoading("shopify");
       setError("");
-      
-      const shopDomain = prompt('Enter your Shopify shop domain (e.g., mystore.myshopify.com):');
+
+      const shopDomain = prompt(
+        "Enter your Shopify shop domain (e.g., mystore.myshopify.com):"
+      );
       if (!shopDomain) {
         setOauthLoading(null);
         return;
       }
-      
+
       // Validate shop domain format
       const shopDomainRegex = /^[a-zA-Z0-9-]+\.myshopify\.com$/;
       if (!shopDomainRegex.test(shopDomain)) {
-        setError('Invalid shop domain format. Please use format: mystore.myshopify.com');
+        setError(
+          "Invalid shop domain format. Please use format: mystore.myshopify.com"
+        );
         setOauthLoading(null);
         return;
       }
-      
+
       // Use oauthService for consistency
-      const oauthService = (await import('../services/oauthService')).default;
-      
+      const oauthService = (await import("../services/oauthService")).default;
+
       // Store shop domain for the service
-      sessionStorage.setItem('shopify_domain', shopDomain);
-      
+      sessionStorage.setItem("shopify_domain", shopDomain);
+
       // Direct redirect to backend OAuth endpoint
-      const API_URL = import.meta.env.VITE_API_URL || 'https://travelclothingclub-admin.online/api';
-      window.location.href = `${API_URL}/social/shopify/redirect?shop=${encodeURIComponent(shopDomain)}`;
-      
+      const API_URL =
+        import.meta.env.VITE_API_URL ||
+        "https://travelclothingclub-admin.online/api";
+      window.location.href = `${API_URL}/social/shopify/redirect?shop=${encodeURIComponent(
+        shopDomain
+      )}`;
     } catch (error) {
-      setError(error.message || 'Failed to initiate Shopify login');
+      setError(error.message || "Failed to initiate Shopify login");
       setOauthLoading(null);
     }
   };
@@ -117,12 +127,10 @@ const Login = () => {
   useEffect(() => {
     setInterval(() => {
       setError("");
-    
     }, 10000);
   }, []);
 
   // return (
-
 
   //   <div
   //     className="min-h-screen flex bg-contain relative"
@@ -156,11 +164,10 @@ const Login = () => {
 
   //           {error && Object.keys(fieldErrors).length === 0 && (
   //             <div className="p-4 mb-4 text-smrounded-lg bg-red-500/60 text-white" role="alert">
-  //               <span className="font-medium ">{error}</span> 
+  //               <span className="font-medium ">{error}</span>
   //             </div>
-              
-  //           )}
 
+  //           )}
 
   //           <div className="flex flex-col gap-y-6">
 
@@ -230,13 +237,13 @@ const Login = () => {
   //                 type="checkbox"
   //                 checked={rememberMe}
   //                 onChange={(e) => setRememberMe(e.target.checked)}
-  //                 className="w-[18px] h-[18px] rounded-md appearance-none border border-gray-300 
-  //              checked:bg-orange-500 checked:border-orange-500 
-  //              relative 
-  //              checked:after:content-[''] 
+  //                 className="w-[18px] h-[18px] rounded-md appearance-none border border-gray-300
+  //              checked:bg-orange-500 checked:border-orange-500
+  //              relative
+  //              checked:after:content-['']
   //              checked:after:absolute checked:after:inset-0 checked:after:mx-auto checked:after:mt-[1px]
-  //              checked:after:w-[6px] checked:after:h-[10px] 
-  //              checked:after:border-r-2 checked:after:border-b-2 
+  //              checked:after:w-[6px] checked:after:h-[10px]
+  //              checked:after:border-r-2 checked:after:border-b-2
   //              checked:after:border-white checked:after:rotate-45"
 
   //               />
@@ -261,7 +268,7 @@ const Login = () => {
   //         </div>
 
   //         <div className="space-y-3">
-  //           <button 
+  //           <button
   //             onClick={handleGoogleLogin}
   //             disabled={oauthLoading !== null}
   //             className="w-full border border-[#D9D9D9] py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -277,7 +284,7 @@ const Login = () => {
   //           </button>
 
   //           <div className="flex space-x-4">
-  //             <button 
+  //             <button
   //               onClick={handleAppleLogin}
   //               disabled={oauthLoading !== null}
   //               className="w-1/2 border border-[#D9D9D9] py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -291,7 +298,7 @@ const Login = () => {
   //                 {oauthLoading === 'apple' ? 'Connecting...' : 'Sign in with Apple'}
   //               </span>
   //             </button>
-  //             <button 
+  //             <button
   //               onClick={handleShopifyLogin}
   //               disabled={oauthLoading !== null}
   //               className="w-1/2 border border-[#D9D9D9] py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
@@ -319,8 +326,6 @@ const Login = () => {
   //   </div>
   // );
 
-
-
   return (
     <div
       className="min-h-screen flex flex-col  lg:flex-row bg-contain relative"
@@ -332,18 +337,12 @@ const Login = () => {
           <img src={logo} alt="logo" />
         </div>
 
-        <div
-          className="bg-gradient-to-b mt-8 from-[#F77F00]/40 to-[#666666]/40  lg:p-8 rounded-lg "
-        >
-          <h2
-            className="text-2xl sm:text-4xl lg:text-7xl font-semibold font-roboto leading-tight"
-          >
+        <div className="bg-gradient-to-b mt-8 from-[#F77F00]/40 to-[#666666]/40  lg:p-8 rounded-lg ">
+          <h2 className="text-2xl sm:text-4xl lg:text-7xl font-semibold font-roboto leading-tight">
             <span className="text-orange-400">Grow</span> with every traveler
           </h2>
 
-          <p
-            className="mt-3 text-sm sm:text-base lg:text-lg text-gray-200 font-inter leading-relaxed"
-          >
+          <p className="mt-3 text-sm sm:text-base lg:text-lg text-gray-200 font-inter leading-relaxed">
             Reach high-value guests where they stay. List your best pieces and
             get paid without adding headcount
           </p>
@@ -488,6 +487,12 @@ const Login = () => {
               </button>
             </div>
           </div>
+          <p className="text-center text-base font-inter text-gray-600 mt-6">
+            Don’t have an account?{" "}
+            <Link to="/signup" className="text-[#F77F00] fw6 ">
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
